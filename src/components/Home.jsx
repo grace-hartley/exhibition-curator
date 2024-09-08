@@ -20,15 +20,12 @@ const Home = () => {
         </p>
 
         <Link to="/artwork">
-          <button className="view-all-button">
-            <p>View All</p>
+          <button className="view-met-button">
+            <p>View Metropolitan Museum Artworks</p>
           </button>
         </Link>
-        <button className="view-met-button">
-          <p>View Met Artworks</p>
-        </button>
         <button className="view-chicago-button">
-          <p>View Chicago Artworks</p>
+          <p>View Art Institute of Chicago Artworks</p>
         </button>
       </div>
     </>

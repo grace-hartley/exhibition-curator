@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import UserArt from "./UsersArt";
+import UserArt from "./CuratedArt";
 
 const Header = () => {
   return (
