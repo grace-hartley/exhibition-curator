@@ -4,7 +4,7 @@ import { getMetObjectIDs, getMetObjectDetails } from "../api/metApi";
 getMetObjectIDs;
 
 const normalizeMetArtwork = (artwork) => {
-  if (!artwork.primaryImage) return null;
+  if (!artwork.primaryImage) return null; // don't include artwork that doesn't have an image
 
   return {
     id: `met-${artwork.objectID}`,
@@ -13,6 +13,7 @@ const normalizeMetArtwork = (artwork) => {
     year: artwork.objectDate || "Unknown Date",
     medium: artwork.medium || "Unknown Medium",
     imageUrl: artwork.primaryImage,
+    imageUrlSmall: artwork.primaryImageSmall,
     isHighlight: artwork.isHighlight,
     source: "Metropolitan Museum of Art",
     description: "",

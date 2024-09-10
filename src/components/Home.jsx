@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <>
-      <div className="home">
-        <h2>Welcome to ExhibitionCurator!</h2>
+      <h2 className="text-3xl font-medium m-6">
+        Welcome to ExhibitionCurator!
+      </h2>
+      <div className="m-6 space-y-3">
         <p>
           “Art is not what you see, but what you make others see.” – Edgar Degas
         </p>
@@ -18,13 +20,15 @@ const Home = () => {
           When you close the browzer your collection goes with it - it is there
           to be enjoyed for a short time, not a long time!
         </p>
+      </div>
 
+      <div className="m-6">
         <Link to="/artwork">
-          <button className="view-met-button">
+          <button className="rounded-lg bg-zinc-300 p-1.5 m-2">
             <p>View Metropolitan Museum Artworks</p>
           </button>
         </Link>
-        <button className="view-chicago-button">
+        <button className="rounded-lg bg-zinc-300 p-1.5 m-2">
           <p>View Art Institute of Chicago Artworks</p>
         </button>
       </div>
