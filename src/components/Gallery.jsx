@@ -63,7 +63,9 @@ const Gallery = () => {
                 />
                 <div className="text-center">
                   <p className="text-lg font-semibold">{artwork.title}</p>
-                  <p className="text-sm text-gray-500">{artwork.year}</p>
+                  <p className="text-sm text-gray-500">
+                    {artwork.year}, {artwork.id}
+                  </p>
                 </div>
               </li>
             ))}

@@ -1,7 +1,5 @@
+import { getChicArtworkList } from "../api/chicagoApi";
 import { getMetObjectIDs, getMetObjectDetails } from "../api/metApi";
-// import chicago art api methods here
-
-getMetObjectIDs;
 
 const normalizeMetArtwork = (artwork) => {
   if (!artwork.primaryImage) return null; // don't include artwork that doesn't have an image
@@ -16,23 +14,46 @@ const normalizeMetArtwork = (artwork) => {
     imageUrlSmall: artwork.primaryImageSmall,
     isHighlight: artwork.isHighlight,
     source: "Metropolitan Museum of Art",
-    description: "",
+    description: "Description not available.",
+    infoURL: artwork.objectURL || "Link not available.",
   };
 };
 
-//Normalize Chicago art here
+const normalizeChicagoArtworks = (artwork) => {
+  const artworkImage = `https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg`;
+
+  const detailsPage = `https://www.artic.edu/artworks/${
+    artwork.id
+  }/${artwork.title.replace(/\s+/g, "-").toLowerCase()}`;
+
+  return {
+    id: `chi-${artwork.id}`,
+    title: artwork.title || "Untitled",
+    artist: artwork.artist_title || "Unknown Artist",
+    year: artwork.date_display || "Unknown Date",
+    medium: artwork.medium_display || "Unknown Medium",
+    imageUrl: artworkImage,
+    imageUrlSmall: artworkImage, // no small image provided so just used standard image
+    isHighlight: artwork.is_boosted,
+    source: "The Art Institute of Chicago",
+    description: artwork.description || "Description not available.",
+    // infoURL: detailsPage || "Link not available.",
+    //example URL: https://www.artic.edu/artworks/129884/starry-night-and-the-astronauts
+  };
+};
 
 export const fetchAndNormalizeArt = async (page = 1, pageSize = 20) => {
   try {
     const normalizedMetArtworks = [];
     const normalizedChicagoArtworks = [];
-    const allNormalizedArtworks = [];
 
     const metObjectIDs = await getMetObjectIDs(); // Fetch Met Museum object IDs
+    const chicArtworkList = await getChicArtworkList(page, pageSize); // Fetch Chicago artwork list
+    console.log(chicArtworkList.length);
     let startIndex = (page - 1) * pageSize;
     let endIndex = startIndex + pageSize;
 
-    // Ensure objectIDs are valid and not empty
+    // Check objectIDs are valid and not empty
     if (!metObjectIDs || metObjectIDs.length === 0) {
       console.error("No object IDs returned");
       return [];
@@ -62,7 +83,16 @@ export const fetchAndNormalizeArt = async (page = 1, pageSize = 20) => {
       currentIndex += pageSize;
     }
 
-    allNormalizedArtworks.push(...normalizedMetArtworks);
+    const newChicagoArtworks = chicArtworkList
+      .map(normalizeChicagoArtworks)
+      .filter((artwork) => artwork !== null);
+
+    normalizedChicagoArtworks.push(...newChicagoArtworks);
+
+    const allNormalizedArtworks = [
+      ...normalizedChicagoArtworks,
+      ...normalizedMetArtworks,
+    ];
 
     return allNormalizedArtworks.slice(0, pageSize); // Return only the first pageSize artworks
   } catch (error) {
