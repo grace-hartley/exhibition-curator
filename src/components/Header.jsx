@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import UserArt from "./CuratedArt";
+import SearchBar from "./SearchBar";
 
 const Header = () => {
   return (
@@ -9,6 +10,7 @@ const Header = () => {
           ExhibitionCurator
         </h1>
       </Link>
+      <SearchBar />
       <Link to="/user" style={{ textDecoration: "none" }}>
         <button className="mr-10 flex jutify-end bg-zinc-300 rounded-lg p-2">
           <p>Curated Artwork</p>

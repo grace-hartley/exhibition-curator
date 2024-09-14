@@ -10,6 +10,7 @@ const normalizeMetArtwork = (artwork) => {
     artist: artwork.artistDisplayName || "Unknown Artist",
     year: artwork.objectDate || "Unknown Date",
     medium: artwork.medium || "Unknown Medium",
+    type: artwork.classification || "Type Unknown",
     imageUrl: artwork.primaryImage,
     imageUrlSmall: artwork.primaryImageSmall,
     isHighlight: artwork.isHighlight,
@@ -32,69 +33,39 @@ const normalizeChicagoArtworks = (artwork) => {
     artist: artwork.artist_title || "Unknown Artist",
     year: artwork.date_display || "Unknown Date",
     medium: artwork.medium_display || "Unknown Medium",
+    type: artwork.artwork_type_title || "Type Unknown",
     imageUrl: artworkImage,
     imageUrlSmall: artworkImage, // no small image provided so just used standard image
     isHighlight: artwork.is_boosted,
     source: "The Art Institute of Chicago",
     description: artwork.description || "Description not available.",
-    // infoURL: detailsPage || "Link not available.",
-    //example URL: https://www.artic.edu/artworks/129884/starry-night-and-the-astronauts
+    infoURL: detailsPage || "Link not available.",
   };
 };
 
 export const fetchAndNormalizeArt = async (page = 1, pageSize = 20) => {
   try {
-    const normalizedMetArtworks = [];
-    const normalizedChicagoArtworks = [];
-
-    const metObjectIDs = await getMetObjectIDs(); // Fetch Met Museum object IDs
-    const chicArtworkList = await getChicArtworkList(page, pageSize); // Fetch Chicago artwork list
-    console.log(chicArtworkList.length);
-    let startIndex = (page - 1) * pageSize;
-    let endIndex = startIndex + pageSize;
-
-    // Check objectIDs are valid and not empty
-    if (!metObjectIDs || metObjectIDs.length === 0) {
-      console.error("No object IDs returned");
-      return [];
-    }
-
-    // Keep fetching until we get enough valid artworks with images
-    let currentIndex = startIndex;
-    while (
-      normalizedMetArtworks.length < pageSize &&
-      currentIndex < metObjectIDs.length
-    ) {
-      // Fetch details for the next batch of Met Museum objects
-      const metArtworks = await Promise.all(
-        metObjectIDs
-          .slice(currentIndex, currentIndex + pageSize)
-          .map((id) => getMetObjectDetails(id))
-      );
-
-      // Normalize and filter Met Museum artworks (only those with images)
-      const newArtworks = metArtworks
-        .map(normalizeMetArtwork)
-        .filter((artwork) => artwork !== null);
-
-      normalizedMetArtworks.push(...newArtworks);
-
-      // Adjust start and end index to fetch the next batch
-      currentIndex += pageSize;
-    }
-
-    const newChicagoArtworks = chicArtworkList
+    const chicArtworkList = await getChicArtworkList(page, pageSize);
+    const normalizedChicagoArtworks = chicArtworkList
       .map(normalizeChicagoArtworks)
       .filter((artwork) => artwork !== null);
 
-    normalizedChicagoArtworks.push(...newChicagoArtworks);
+    const metObjectIDs = await getMetObjectIDs();
+    const metArtworks = await Promise.all(
+      metObjectIDs
+        .slice((page - 1) * pageSize, page * pageSize)
+        .map((id) => getMetObjectDetails(id))
+    );
+    const normalizedMetArtworks = metArtworks
+      .map(normalizeMetArtwork)
+      .filter((artwork) => artwork !== null);
 
-    const allNormalizedArtworks = [
+    const combinedArtworks = [
       ...normalizedChicagoArtworks,
       ...normalizedMetArtworks,
     ];
 
-    return allNormalizedArtworks.slice(0, pageSize); // Return only the first pageSize artworks
+    return combinedArtworks;
   } catch (error) {
     console.error("Error fetching and normalizing artwork:", error);
     return [];

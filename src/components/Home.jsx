@@ -25,9 +25,12 @@ const Home = () => {
       <div className="m-6">
         <Link to="/artwork">
           <button className="rounded-lg bg-zinc-300 p-1.5 m-2">
-            <p>View Metropolitan Museum Artworks</p>
+            <p>View All Artworks</p>
           </button>
         </Link>
+        <button className="rounded-lg bg-zinc-300 p-1.5 m-2">
+          <p>View Metropolitan Museum Artworks</p>
+        </button>
         <button className="rounded-lg bg-zinc-300 p-1.5 m-2">
           <p>View Art Institute of Chicago Artworks</p>
         </button>
