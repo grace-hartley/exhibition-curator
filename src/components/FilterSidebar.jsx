@@ -1,12 +1,33 @@
 import { useState } from "react";
 
 const FilterSidebar = ({ filters, setFilters }) => {
-  const { source } = filters;
+  const { source, artworkType, yearBegin, yearEnd } = filters;
 
   const handleSourceChange = (event) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       source: event.target.value,
+    }));
+  };
+
+  const handleArtworkTypeChange = (event) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      artworkType: event.target.value,
+    }));
+  };
+
+  const handleYearBeginChange = (event) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      yearBegin: event.target.value,
+    }));
+  };
+
+  const handleYearEndChange = (event) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      yearEnd: event.target.value,
     }));
   };
 
@@ -49,6 +70,38 @@ const FilterSidebar = ({ filters, setFilters }) => {
           />
           <span className="ml-2">Metropolitan Museum of Art</span>
         </label>
+      </div>
+
+      {/* Below filters don't work yet. Needs work to integrate with search endpoint */}
+      <label className="block mb-2 font-semibold">Artwork Type</label>
+      <select
+        value={artworkType || ""}
+        onChange={handleArtworkTypeChange}
+        className="form-select mb-4 bg-gray-300"
+      >
+        <option value="">All Types</option>
+        <option value="Painting">Painting</option>
+        <option value="Sculpture">Sculpture</option>
+        <option value="Drawing">Drawing</option>
+        {/* Might need updating/reformatting */}
+      </select>
+
+      <label className="block mb-2 font-semibold mt-4">Date Range</label>
+      <div className="flex">
+        <input
+          type="number"
+          value={yearBegin}
+          onChange={handleYearBeginChange}
+          className="border p-1 rounded w-1/2 mr-2 bg-gray-300"
+          placeholder="Year Begin"
+        />
+        <input
+          type="number"
+          value={yearEnd}
+          onChange={handleYearEndChange}
+          className="border p-1 rounded w-1/2 bg-gray-300"
+          placeholder="Year End"
+        />
       </div>
     </div>
   );

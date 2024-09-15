@@ -30,3 +30,32 @@ export const getMetObjectDetails = (objectID) => {
       return [];
     });
 };
+
+export const searchMetArtworks = (query, page = 1, pageSize = 20) => {
+  const path =
+    "https://collectionapi.metmuseum.org/public/collection/v1/search";
+
+  const params = {
+    q: query,
+    page: page,
+    limit: pageSize,
+  };
+
+  return axios
+    .get(path, { params })
+    .then((response) => {
+      if (response.status === 200 && response.data && response.data.objectIDs) {
+        return response.data.objectIDs;
+      } else {
+        return [];
+      }
+    })
+    .catch((error) => {
+      console.error("Error searching Met artworks:", error);
+      return [];
+    });
+};
+
+// example of working year range filter
+//https://collectionapi.metmuseum.org/public/collection/v1/search?dateBegin=1700&dateEnd=1800&q=African
+//note query has to go at the end ?! could have something to do with it

@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
 import { fetchAndNormalizeArt } from "../data/fetchAndNormalize";
-import FilterSidebar from "./FilterSidebar";
 import ArtworkList from "./ArtworkList";
+import FilterSidebar from "./FilterSidebar";
 
-const Gallery = () => {
+const SearchResults = ({ searchQuery }) => {
   const [artworks, setArtworks] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(null);
+  const [filters, setFilters] = useState({
+    source: "",
+    artworkType: "",
+    year: "",
+  });
 
   const pageSize = 20;
 
@@ -16,7 +21,11 @@ const Gallery = () => {
     const loadArtworks = async () => {
       setLoading(true);
       try {
-        const newArtworks = await fetchAndNormalizeArt(page, pageSize);
+        const newArtworks = await fetchAndNormalizeArt(
+          page,
+          pageSize,
+          searchQuery
+        );
         setArtworks((prevArtworks) => [...prevArtworks, ...newArtworks]);
       } catch (err) {
         setError("Failed to load artworks");
@@ -26,7 +35,7 @@ const Gallery = () => {
     };
 
     loadArtworks();
-  }, [page]);
+  }, [page, searchQuery]);
 
   const loadMoreArtworks = () => {
     if (hasMore && !loading) {
@@ -36,8 +45,13 @@ const Gallery = () => {
 
   return (
     <div className="flex">
-      <div className="container w-full mx-auto p-4">
-        <h2 className="text-4xl font-bold text-center mb-8">Gallery</h2>
+      <div className="flex">
+        <FilterSidebar filters={filters} setFilters={setFilters} />
+      </div>
+      <div className="container mx-auto p-4">
+        <h2 className="text-4xl font-bold text-center mb-8">
+          Search Results for {searchQuery}
+        </h2>
 
         {loading && page === 1 ? (
           <p>Loading artworks...</p>
@@ -46,7 +60,6 @@ const Gallery = () => {
         ) : (
           <>
             <ArtworkList artworks={artworks} />
-
             {hasMore && !loading && (
               <div className="text-center mt-8">
                 <button
@@ -68,4 +81,4 @@ const Gallery = () => {
   );
 };
 
-export default Gallery;
+export default SearchResults;

@@ -1,5 +1,13 @@
-import { getChicArtworkList } from "../api/chicagoApi";
-import { getMetObjectIDs, getMetObjectDetails } from "../api/metApi";
+import {
+  getChicArtworkList,
+  searchChicagoArtworks,
+  getChiArtworkDetails,
+} from "../api/chicagoApi";
+import {
+  getMetObjectIDs,
+  getMetObjectDetails,
+  searchMetArtworks,
+} from "../api/metApi";
 
 const normalizeMetArtwork = (artwork) => {
   if (!artwork.primaryImage) return null; // don't include artwork that doesn't have an image
@@ -15,7 +23,6 @@ const normalizeMetArtwork = (artwork) => {
     imageUrlSmall: artwork.primaryImageSmall,
     isHighlight: artwork.isHighlight,
     source: "Metropolitan Museum of Art",
-    description: "Description not available.",
     infoURL: artwork.objectURL || "Link not available.",
   };
 };
@@ -38,24 +45,49 @@ const normalizeChicagoArtworks = (artwork) => {
     imageUrlSmall: artworkImage, // no small image provided so just used standard image
     isHighlight: artwork.is_boosted,
     source: "The Art Institute of Chicago",
-    description: artwork.description || "Description not available.",
     infoURL: detailsPage || "Link not available.",
   };
 };
 
-export const fetchAndNormalizeArt = async (page = 1, pageSize = 20) => {
+export const fetchAndNormalizeArt = async (
+  page = 1,
+  pageSize = 20,
+  searchQuery = ""
+) => {
   try {
-    const chicArtworkList = await getChicArtworkList(page, pageSize);
+    let chicArtworkList = [];
+    let metArtworks = [];
+
+    if (searchQuery) {
+      const chiSearchResults = await searchChicagoArtworks(
+        searchQuery,
+        page,
+        pageSize
+      );
+
+      const chicArtworkDetail = chiSearchResults.map(async (artwork) => {
+        const details = await getChiArtworkDetails(artwork.id);
+        return details;
+      });
+
+      chicArtworkList = await Promise.all(chicArtworkDetail);
+
+      metArtworks = await searchMetArtworks(searchQuery);
+    } else {
+      chicArtworkList = await getChicArtworkList(page, pageSize);
+
+      const metObjectIDs = await getMetObjectIDs();
+      metArtworks = await Promise.all(
+        metObjectIDs
+          .slice((page - 1) * pageSize, page * pageSize)
+          .map((id) => getMetObjectDetails(id))
+      );
+    }
+
     const normalizedChicagoArtworks = chicArtworkList
       .map(normalizeChicagoArtworks)
       .filter((artwork) => artwork !== null);
 
-    const metObjectIDs = await getMetObjectIDs();
-    const metArtworks = await Promise.all(
-      metObjectIDs
-        .slice((page - 1) * pageSize, page * pageSize)
-        .map((id) => getMetObjectDetails(id))
-    );
     const normalizedMetArtworks = metArtworks
       .map(normalizeMetArtwork)
       .filter((artwork) => artwork !== null);
