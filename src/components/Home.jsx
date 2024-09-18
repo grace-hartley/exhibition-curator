@@ -7,11 +7,13 @@ const Home = () => {
       </h2>
       <div className="m-6 space-y-3">
         <p>
-          “Art is not what you see, but what you make others see.” – Edgar Degas
+          “Art is not what you see, but what you make others see.” – Edgar
+          Degas, French Impressionist (1834-1917)
         </p>
         <p>
-          Explore more about a wide range of art and curate your personal
-          collection of art. This is your place to let your personanality shine.
+          ExhibitionCurator allows you to explore more about a wide range of art
+          and curate your own personal collection of art. This is your place to
+          let your personanality shine!
         </p>
         <p>
           To get started, click on the gallery below that you would like to

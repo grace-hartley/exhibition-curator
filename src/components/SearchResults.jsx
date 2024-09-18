@@ -3,9 +3,8 @@ import { fetchAndNormalizeArt } from "../data/fetchAndNormalize";
 import ArtworkList from "./ArtworkList";
 import FilterSidebar from "./FilterSidebar";
 
-const SearchResults = ({ searchQuery }) => {
+const SearchResults = ({ searchQuery, page, setPage }) => {
   const [artworks, setArtworks] = useState([]);
-  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +25,7 @@ const SearchResults = ({ searchQuery }) => {
           pageSize,
           searchQuery
         );
-        setArtworks((prevArtworks) => [...prevArtworks, ...newArtworks]);
+        setArtworks(newArtworks);
       } catch (err) {
         setError("Failed to load artworks");
       } finally {

@@ -9,11 +9,12 @@ import {
   searchMetArtworks,
 } from "../api/metApi";
 
-const normalizeMetArtwork = (artwork) => {
+export const normalizeMetArtwork = (artwork) => {
   if (!artwork.primaryImage) return null; // don't include artwork that doesn't have an image
 
   return {
     id: `met-${artwork.objectID}`,
+    idOrigin: artwork.objectID,
     title: artwork.title || "Untitled",
     artist: artwork.artistDisplayName || "Unknown Artist",
     year: artwork.objectDate || "Unknown Date",
@@ -27,7 +28,9 @@ const normalizeMetArtwork = (artwork) => {
   };
 };
 
-const normalizeChicagoArtworks = (artwork) => {
+export const normalizeChicagoArtworks = (artwork) => {
+  if (artwork.image_id === null) return null;
+
   const artworkImage = `https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg`;
 
   const detailsPage = `https://www.artic.edu/artworks/${
@@ -36,6 +39,7 @@ const normalizeChicagoArtworks = (artwork) => {
 
   return {
     id: `chi-${artwork.id}`,
+    idOrigin: artwork.id,
     title: artwork.title || "Untitled",
     artist: artwork.artist_title || "Unknown Artist",
     year: artwork.date_display || "Unknown Date",
