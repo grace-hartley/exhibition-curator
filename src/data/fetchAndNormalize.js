@@ -18,6 +18,7 @@ export const normalizeMetArtwork = (artwork) => {
     title: artwork.title || "Untitled",
     artist: artwork.artistDisplayName || "Unknown Artist",
     year: artwork.objectDate || "Unknown Date",
+    yearEnd: artwork.objectEndDate,
     medium: artwork.medium || "Unknown Medium",
     type: artwork.classification || "Type Unknown",
     imageUrl: artwork.primaryImage,
@@ -43,6 +44,7 @@ export const normalizeChicagoArtworks = (artwork) => {
     title: artwork.title || "Untitled",
     artist: artwork.artist_title || "Unknown Artist",
     year: artwork.date_display || "Unknown Date",
+    yearEnd: artwork.date_end,
     medium: artwork.medium_display || "Unknown Medium",
     type: artwork.artwork_type_title || "Type Unknown",
     imageUrl: artworkImage,
@@ -56,52 +58,59 @@ export const normalizeChicagoArtworks = (artwork) => {
 export const fetchAndNormalizeArt = async (
   page = 1,
   pageSize = 20,
-  searchQuery = ""
+  searchQuery = "",
+  filters = {}
 ) => {
   try {
     let chicArtworkList = [];
-    let metArtworks = [];
+    let metObjectIDs = [];
 
     if (searchQuery) {
-      const chiSearchResults = await searchChicagoArtworks(
-        searchQuery,
-        page,
-        pageSize
-      );
+      const { source, artworkType, yearBegin, yearEnd, isHighlight } = filters;
+      // const chiSearchResults = await searchChicagoArtworks(
+      //   searchQuery,
+      //   { start: yearBegin, end: yearEnd }, // Year range filter
+      //   isHighlight,
+      //   artworkType,
+      //   page,
+      //   pageSize
+      // );
 
-      const chicArtworkDetail = chiSearchResults.map(async (artwork) => {
-        const details = await getChiArtworkDetails(artwork.id);
-        return details;
-      });
+      // const chicArtworkDetail = chiSearchResults.map(async (artwork) => {
+      //   const details = await getChiArtworkDetails(artwork.id);
+      //   return details;
+      // });
 
-      chicArtworkList = await Promise.all(chicArtworkDetail);
+      // chicArtworkList = await Promise.all(chicArtworkDetail);
 
-      metArtworks = await searchMetArtworks(searchQuery);
+      metObjectIDs = await searchMetArtworks(searchQuery, filters);
     } else {
-      chicArtworkList = await getChicArtworkList(page, pageSize);
-
-      const metObjectIDs = await getMetObjectIDs();
-      metArtworks = await Promise.all(
-        metObjectIDs
-          .slice((page - 1) * pageSize, page * pageSize)
-          .map((id) => getMetObjectDetails(id))
-      );
+      // chicArtworkList = await getChicArtworkList(page, pageSize);
+      metObjectIDs = await getMetObjectIDs();
     }
 
-    const normalizedChicagoArtworks = chicArtworkList
-      .map(normalizeChicagoArtworks)
-      .filter((artwork) => artwork !== null);
+    const metArtworks = await Promise.all(
+      metObjectIDs
+        .slice((page - 1) * pageSize, page * pageSize)
+        .map((id) => getMetObjectDetails(id))
+    );
+
+    // const normalizedChicagoArtworks = chicArtworkList
+    //   .map(normalizeChicagoArtworks)
+    //   .filter((artwork) => artwork !== null);
 
     const normalizedMetArtworks = metArtworks
       .map(normalizeMetArtwork)
       .filter((artwork) => artwork !== null);
 
-    const combinedArtworks = [
-      ...normalizedChicagoArtworks,
-      ...normalizedMetArtworks,
-    ];
+    // const combinedArtworks = [
+    //   ...normalizedChicagoArtworks,
+    //   ...normalizedMetArtworks,
+    // ];
 
-    return combinedArtworks;
+    // return combinedArtworks;
+
+    return [...normalizedMetArtworks];
   } catch (error) {
     console.error("Error fetching and normalizing artwork:", error);
     return [];

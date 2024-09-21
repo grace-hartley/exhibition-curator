@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const FilterSidebar = ({ filters, setFilters }) => {
-  const { source, artworkType, yearBegin, yearEnd } = filters;
+  const { source, artworkType, yearBegin, yearEnd, isHighlight } = filters;
 
   const handleSourceChange = (event) => {
     setFilters((prevFilters) => ({
@@ -31,12 +31,19 @@ const FilterSidebar = ({ filters, setFilters }) => {
     }));
   };
 
+  const handleIsHighlightChange = (event) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      isHighlight: event.target.checked,
+    }));
+  };
+
   return (
     <div className="filter-sidebar p-4 bg-gray-100 rounded">
       <h3 className="text-lg mb-4">Filters</h3>
 
+      {/* Source filter */}
       <label className="block mb-2 font-semibold">Source</label>
-
       <div className="flex flex-col">
         <label className="inline-flex items-center mb-2">
           <input
@@ -48,7 +55,6 @@ const FilterSidebar = ({ filters, setFilters }) => {
           />
           <span className="ml-2">All Sources</span>
         </label>
-
         <label className="inline-flex items-center mb-2">
           <input
             type="radio"
@@ -59,7 +65,6 @@ const FilterSidebar = ({ filters, setFilters }) => {
           />
           <span className="ml-2">The Art Institute of Chicago</span>
         </label>
-
         <label className="inline-flex items-center mb-2">
           <input
             type="radio"
@@ -72,7 +77,7 @@ const FilterSidebar = ({ filters, setFilters }) => {
         </label>
       </div>
 
-      {/* Below filters don't work yet. Needs work to integrate with search endpoint */}
+      {/* Artwork Type filter */}
       <label className="block mb-2 font-semibold">Artwork Type</label>
       <select
         value={artworkType || ""}
@@ -83,9 +88,9 @@ const FilterSidebar = ({ filters, setFilters }) => {
         <option value="Painting">Painting</option>
         <option value="Sculpture">Sculpture</option>
         <option value="Drawing">Drawing</option>
-        {/* Might need updating/reformatting */}
       </select>
 
+      {/* Year Range filter */}
       <label className="block mb-2 font-semibold mt-4">Date Range</label>
       <div className="flex">
         <input
@@ -103,6 +108,17 @@ const FilterSidebar = ({ filters, setFilters }) => {
           placeholder="Year End"
         />
       </div>
+
+      {/* Is Highlight filter */}
+      <label className="inline-flex items-center mb-2 mt-4">
+        <input
+          type="checkbox"
+          checked={isHighlight}
+          onChange={handleIsHighlightChange}
+          className="form-checkbox"
+        />
+        <span className="ml-2">Show Highlights</span>
+      </label>
     </div>
   );
 };

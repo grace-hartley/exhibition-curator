@@ -31,18 +31,42 @@ export const getMetObjectDetails = (objectID) => {
     });
 };
 
-export const searchMetArtworks = (query, page = 1, pageSize = 20) => {
-  const path =
-    "https://collectionapi.metmuseum.org/public/collection/v1/search";
+export const searchMetArtworks = (
+  searchTerm,
+  yearRange = {},
+  isHighlight = null,
+  artworkType = null
+) => {
+  let path = `https://collectionapi.metmuseum.org/public/collection/v1/search?`;
 
-  const params = {
-    q: query,
-    page: page,
-    limit: pageSize,
-  };
+  let conditions = [];
+
+  let query = `q=${encodeURIComponent(searchTerm)}`;
+
+  if (yearRange.start && yearRange.end) {
+    conditions.push(`dateBegin=${yearRange.start}&dateEnd=${yearRange.end}`);
+  }
+
+  if (isHighlight !== null) {
+    conditions.push(`isHighlight=${isHighlight ? "true" : "false"}`);
+  }
+
+  if (artworkType) {
+    if (artworkType === "Painting") {
+      conditions.push(`medium=Paintings`);
+    }
+    if (artworkType === "Sculpture") {
+      conditions.push(`medium=Sculpture`);
+    }
+    if (artworkType === "Drawing") {
+      conditions.push(`medium=Drawings`);
+    }
+  }
+
+  path += query;
 
   return axios
-    .get(path, { params })
+    .get(path)
     .then((response) => {
       if (response.status === 200 && response.data && response.data.objectIDs) {
         return response.data.objectIDs;
@@ -57,5 +81,31 @@ export const searchMetArtworks = (query, page = 1, pageSize = 20) => {
 };
 
 // example of working year range filter
+// https://collectionapi.metmuseum.org/public/collection/v1/search?&page=1&limit=20q=sunflowers
+
 //https://collectionapi.metmuseum.org/public/collection/v1/search?dateBegin=1700&dateEnd=1800&q=African
-//note query has to go at the end ?! could have something to do with it
+
+// https://collectionapi.metmuseum.org/public/collection/v1/search?isHighlight=true&q=African
+
+// https://collectionapi.metmuseum.org/public/collection/v1/search?dateBegin=1700&dateEnd=1800&isHighlight=true&q=African
+
+// https://collectionapi.metmuseum.org/public/collection/v1/search?medium=Drawings&q=African
+
+// combining them works both ways around
+
+/* 
+types:
+Woodwork
+Basketry, Ceramics, Paintings
+
+
+Ceramics
+Furniture
+Paintings
+Sculpture
+Textiles
+Drawings
+
+
+complicated...
+*/

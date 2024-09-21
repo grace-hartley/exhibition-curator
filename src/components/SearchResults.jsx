@@ -11,7 +11,9 @@ const SearchResults = ({ searchQuery, page, setPage }) => {
   const [filters, setFilters] = useState({
     source: "",
     artworkType: "",
-    year: "",
+    yearBegin: "",
+    yearEnd: "",
+    isHighlight: false,
   });
 
   const pageSize = 20;
@@ -23,7 +25,8 @@ const SearchResults = ({ searchQuery, page, setPage }) => {
         const newArtworks = await fetchAndNormalizeArt(
           page,
           pageSize,
-          searchQuery
+          searchQuery,
+          filters
         );
         setArtworks(newArtworks);
       } catch (err) {
@@ -34,7 +37,7 @@ const SearchResults = ({ searchQuery, page, setPage }) => {
     };
 
     loadArtworks();
-  }, [page, searchQuery]);
+  }, [page, searchQuery, filters]);
 
   const loadMoreArtworks = () => {
     if (hasMore && !loading) {
