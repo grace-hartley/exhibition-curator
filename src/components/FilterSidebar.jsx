@@ -88,6 +88,7 @@ const FilterSidebar = ({ filters, setFilters }) => {
         <option value="Painting">Painting</option>
         <option value="Sculpture">Sculpture</option>
         <option value="Drawing">Drawing</option>
+        <option value="Print">Print</option>
       </select>
 
       {/* Year Range filter */}

@@ -67,25 +67,30 @@ export const fetchAndNormalizeArt = async (
 
     if (searchQuery) {
       const { source, artworkType, yearBegin, yearEnd, isHighlight } = filters;
-      // const chiSearchResults = await searchChicagoArtworks(
-      //   searchQuery,
-      //   { start: yearBegin, end: yearEnd }, // Year range filter
-      //   isHighlight,
-      //   artworkType,
-      //   page,
-      //   pageSize
-      // );
+      const chiSearchResults = await searchChicagoArtworks(
+        searchQuery,
+        { start: yearBegin, end: yearEnd },
+        isHighlight,
+        artworkType,
+        page,
+        pageSize
+      );
 
-      // const chicArtworkDetail = chiSearchResults.map(async (artwork) => {
-      //   const details = await getChiArtworkDetails(artwork.id);
-      //   return details;
-      // });
+      const chicArtworkDetail = chiSearchResults.map(async (artwork) => {
+        const details = await getChiArtworkDetails(artwork.id);
+        return details;
+      });
 
-      // chicArtworkList = await Promise.all(chicArtworkDetail);
+      chicArtworkList = await Promise.all(chicArtworkDetail);
 
-      metObjectIDs = await searchMetArtworks(searchQuery, filters);
+      metObjectIDs = await searchMetArtworks(
+        searchQuery,
+        { start: yearBegin, end: yearEnd },
+        isHighlight,
+        artworkType
+      );
     } else {
-      // chicArtworkList = await getChicArtworkList(page, pageSize);
+      chicArtworkList = await getChicArtworkList(page, pageSize);
       metObjectIDs = await getMetObjectIDs();
     }
 
@@ -95,22 +100,20 @@ export const fetchAndNormalizeArt = async (
         .map((id) => getMetObjectDetails(id))
     );
 
-    // const normalizedChicagoArtworks = chicArtworkList
-    //   .map(normalizeChicagoArtworks)
-    //   .filter((artwork) => artwork !== null);
+    const normalizedChicagoArtworks = chicArtworkList
+      .map(normalizeChicagoArtworks)
+      .filter((artwork) => artwork !== null);
 
     const normalizedMetArtworks = metArtworks
       .map(normalizeMetArtwork)
       .filter((artwork) => artwork !== null);
 
-    // const combinedArtworks = [
-    //   ...normalizedChicagoArtworks,
-    //   ...normalizedMetArtworks,
-    // ];
+    const combinedArtworks = [
+      ...normalizedChicagoArtworks,
+      ...normalizedMetArtworks,
+    ];
 
-    // return combinedArtworks;
-
-    return [...normalizedMetArtworks];
+    return combinedArtworks;
   } catch (error) {
     console.error("Error fetching and normalizing artwork:", error);
     return [];

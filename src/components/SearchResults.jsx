@@ -28,7 +28,15 @@ const SearchResults = ({ searchQuery, page, setPage }) => {
           searchQuery,
           filters
         );
-        setArtworks(newArtworks);
+        if (newArtworks.length < pageSize) {
+          setHasMore(false);
+        }
+
+        if (page === 1) {
+          setArtworks(newArtworks);
+        } else {
+          setArtworks((prevArtworks) => [...prevArtworks, ...newArtworks]);
+        }
       } catch (err) {
         setError("Failed to load artworks");
       } finally {
@@ -59,6 +67,8 @@ const SearchResults = ({ searchQuery, page, setPage }) => {
           <p>Loading artworks...</p>
         ) : error ? (
           <p>{error}</p>
+        ) : artworks.length === 0 ? (
+          <p>No results available</p>
         ) : (
           <>
             <ArtworkList artworks={artworks} />
@@ -66,7 +76,7 @@ const SearchResults = ({ searchQuery, page, setPage }) => {
               <div className="text-center mt-8">
                 <button
                   onClick={loadMoreArtworks}
-                  className="px-6 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition"
+                  className="px-6 py-2 bg-zinc-500 text-white font-semibold rounded hover:bg-blue-600 transition"
                 >
                   Load More Artworks
                 </button>

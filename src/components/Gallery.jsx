@@ -37,8 +37,6 @@ const Gallery = () => {
   return (
     <div className="flex">
       <div className="container w-full mx-auto p-4">
-        <h2 className="text-4xl font-bold text-center mb-8">Gallery</h2>
-
         {loading && page === 1 ? (
           <p>Loading artworks...</p>
         ) : error ? (
@@ -51,7 +49,7 @@ const Gallery = () => {
               <div className="text-center mt-8">
                 <button
                   onClick={loadMoreArtworks}
-                  className="px-6 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition"
+                  className="px-6 py-2 bg-stone-500 text-white font-semibold rounded hover:bg-blue-600 transition"
                 >
                   Load More Artworks
                 </button>

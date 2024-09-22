@@ -41,8 +41,6 @@ export const searchMetArtworks = (
 
   let conditions = [];
 
-  let query = `q=${encodeURIComponent(searchTerm)}`;
-
   if (yearRange.start && yearRange.end) {
     conditions.push(`dateBegin=${yearRange.start}&dateEnd=${yearRange.end}`);
   }
@@ -54,19 +52,24 @@ export const searchMetArtworks = (
   if (artworkType) {
     if (artworkType === "Painting") {
       conditions.push(`medium=Paintings`);
-    }
-    if (artworkType === "Sculpture") {
+    } else if (artworkType === "Sculpture") {
       conditions.push(`medium=Sculpture`);
-    }
-    if (artworkType === "Drawing") {
+    } else if (artworkType === "Drawing") {
       conditions.push(`medium=Drawings`);
+    } else if (artworkType === "Print") {
+      conditions.push(`medium=Prints`);
     }
   }
 
-  path += query;
+  let query =
+    conditions.length > 0
+      ? `${conditions.join("&")}&q=${encodeURIComponent(searchTerm)}`
+      : `q=${encodeURIComponent(searchTerm)}`;
+
+  let finalUrl = path + query;
 
   return axios
-    .get(path)
+    .get(finalUrl)
     .then((response) => {
       if (response.status === 200 && response.data && response.data.objectIDs) {
         return response.data.objectIDs;
@@ -81,7 +84,6 @@ export const searchMetArtworks = (
 };
 
 // example of working year range filter
-// https://collectionapi.metmuseum.org/public/collection/v1/search?&page=1&limit=20q=sunflowers
 
 //https://collectionapi.metmuseum.org/public/collection/v1/search?dateBegin=1700&dateEnd=1800&q=African
 
