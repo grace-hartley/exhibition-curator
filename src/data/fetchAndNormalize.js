@@ -64,9 +64,9 @@ export const fetchAndNormalizeArt = async (
   try {
     let chicArtworkList = [];
     let metObjectIDs = [];
+    const { source, artworkType, yearBegin, yearEnd, isHighlight } = filters;
 
     if (searchQuery) {
-      const { source, artworkType, yearBegin, yearEnd, isHighlight } = filters;
       const chiSearchResults = await searchChicagoArtworks(
         searchQuery,
         { start: yearBegin, end: yearEnd },
@@ -113,7 +113,11 @@ export const fetchAndNormalizeArt = async (
       ...normalizedMetArtworks,
     ];
 
-    return combinedArtworks;
+    if (source) {
+      return combinedArtworks.filter((artwork) => artwork.source === source);
+    } else {
+      return combinedArtworks;
+    }
   } catch (error) {
     console.error("Error fetching and normalizing artwork:", error);
     return [];
