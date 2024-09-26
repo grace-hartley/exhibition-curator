@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const getChicArtworkList = (page = 1, pageSize = 20) => {
-  let path = `https://api.artic.edu/api/v1/artworks?fields=id,title,artist_title,date_display,medium_display,artwork_type_title,image_id,is_boosted,date_end,?page=${page}&limit=${pageSize}`;
+export const getChicArtworkList = () => {
+  let path = `https://api.artic.edu/api/v1/artworks?fields=id,title,artist_title,date_display,medium_display,artwork_type_title,image_id,is_boosted,date_end,`;
 
   return axios
     .get(path)
@@ -35,13 +35,11 @@ export const searchChicagoArtworks = async (
   searchTerm,
   yearRange = {},
   isHighlight = null,
-  artworkType = null,
-  page = 1,
-  pageSize = 20
+  artworkType = null
 ) => {
   let path = `https://api.artic.edu/api/v1/artworks/search?q=${encodeURIComponent(
     searchTerm
-  )}&page=${page}&limit=${pageSize}&fields=id,title,artist_title,date_display,medium_display,artwork_type_title,image_id,is_boosted,date_end,date_start`;
+  )}&fields=id,title,artist_title,date_display,medium_display,artwork_type_title,image_id,is_boosted,date_end,date_start`;
 
   let conditions = [];
 

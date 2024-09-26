@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { fetchAndNormalizeArt } from "../data/fetchAndNormalize";
-import FilterSidebar from "./FilterSidebar";
 import ArtworkList from "./ArtworkList";
 
 const Gallery = () => {
@@ -49,7 +48,7 @@ const Gallery = () => {
               <div className="text-center mt-8">
                 <button
                   onClick={loadMoreArtworks}
-                  className="px-6 py-2 bg-stone-500 text-white font-semibold rounded hover:bg-blue-600 transition"
+                  className="px-6 py-2 bg-stone-500 text-white font-semibold rounded hover:bg-orange-600 transition"
                 >
                   Load More Artworks
                 </button>

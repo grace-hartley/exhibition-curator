@@ -15,7 +15,7 @@ const Header = ({ setSearchTerm, setPage }) => {
       <SearchBar setSearchTerm={setSearchTerm} setPage={setPage} />
 
       <Link to="/user" className="text-decoration-none">
-        <button className="flex items-center justify-end hover:bg-zinc-400 transition rounded-lg px-3 py-2 text-sm md:text-base">
+        <button className="flex items-center justify-end hover:bg-orange-600 transition rounded-lg px-3 py-2 text-sm md:text-base">
           <AiOutlinePicture size={30} />
         </button>
       </Link>

@@ -55,6 +55,20 @@ export const normalizeChicagoArtworks = (artwork) => {
   };
 };
 
+const removeDuplicates = (artworks) => {
+  const uniqueArtworks = [];
+  const artworkIds = new Set();
+
+  artworks.forEach((artwork) => {
+    if (!artworkIds.has(artwork.id)) {
+      uniqueArtworks.push(artwork);
+      artworkIds.add(artwork.id);
+    }
+  });
+
+  return uniqueArtworks;
+};
+
 export const fetchAndNormalizeArt = async (
   page = 1,
   pageSize = 20,
@@ -71,9 +85,7 @@ export const fetchAndNormalizeArt = async (
         searchQuery,
         { start: yearBegin, end: yearEnd },
         isHighlight,
-        artworkType,
-        page,
-        pageSize
+        artworkType
       );
 
       const chicArtworkDetail = chiSearchResults.map(async (artwork) => {
@@ -90,7 +102,7 @@ export const fetchAndNormalizeArt = async (
         artworkType
       );
     } else {
-      chicArtworkList = await getChicArtworkList(page, pageSize);
+      chicArtworkList = await getChicArtworkList();
       metObjectIDs = await getMetObjectIDs();
     }
 
@@ -113,10 +125,14 @@ export const fetchAndNormalizeArt = async (
       ...normalizedMetArtworks,
     ];
 
+    const uniqueCombinedArtworks = removeDuplicates(combinedArtworks);
+
     if (source) {
-      return combinedArtworks.filter((artwork) => artwork.source === source);
+      return uniqueCombinedArtworks.filter(
+        (artwork) => artwork.source === source
+      );
     } else {
-      return combinedArtworks;
+      return uniqueCombinedArtworks;
     }
   } catch (error) {
     console.error("Error fetching and normalizing artwork:", error);

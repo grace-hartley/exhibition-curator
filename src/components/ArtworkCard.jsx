@@ -64,7 +64,7 @@ const ArtworkCard = () => {
                 }
                 className="p-2 text-gray-800 hover:text-gray-600 transition bg-white rounded-full shadow-md"
               >
-                <FiMinusCircle size={24} />
+                <FiMinusCircle size={30} />
               </button>
             ) : (
               <button
@@ -73,7 +73,7 @@ const ArtworkCard = () => {
                 }
                 className="p-2 text-gray-800 hover:text-gray-600 transition bg-white rounded-full shadow-md"
               >
-                <FiPlusCircle size={24} />
+                <FiPlusCircle size={30} />
               </button>
             )}
           </div>

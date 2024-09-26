@@ -1,127 +1,145 @@
 import { useState } from "react";
 
-const FilterSidebar = ({ filters, setFilters }) => {
-  const { source, artworkType, yearBegin, yearEnd, isHighlight } = filters;
+const FilterBar = ({ filters, setFilters }) => {
+  // Local state for form inputs
+  const [localFilters, setLocalFilters] = useState({
+    source: filters.source || "",
+    artworkType: filters.artworkType || "",
+    yearBegin: filters.yearBegin || "",
+    yearEnd: filters.yearEnd || "",
+    isHighlight: filters.isHighlight || false,
+  });
 
-  const handleSourceChange = (event) => {
-    setFilters((prevFilters) => ({
+  // Handle changes to local state
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setLocalFilters((prevFilters) => ({
       ...prevFilters,
-      source: event.target.value,
+      [name]: value,
     }));
   };
 
-  const handleArtworkTypeChange = (event) => {
-    setFilters((prevFilters) => ({
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    setLocalFilters((prevFilters) => ({
       ...prevFilters,
-      artworkType: event.target.value,
+      [name]: checked,
     }));
   };
 
-  const handleYearBeginChange = (event) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      yearBegin: event.target.value,
-    }));
-  };
-
-  const handleYearEndChange = (event) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      yearEnd: event.target.value,
-    }));
-  };
-
-  const handleIsHighlightChange = (event) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      isHighlight: event.target.checked,
-    }));
+  // Apply filters when Submit is clicked
+  const applyFilters = () => {
+    setFilters(localFilters);
   };
 
   return (
-    <div className="filter-sidebar p-4 bg-gray-100 rounded">
-      <h3 className="text-lg mb-4">Filters</h3>
-
+    <div className="filter-bar p-3 bg-gray-100 rounded flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
       {/* Source filter */}
-      <label className="block mb-2 font-semibold">Source</label>
       <div className="flex flex-col">
-        <label className="inline-flex items-center mb-2">
-          <input
-            type="radio"
-            value=""
-            checked={source === ""}
-            onChange={handleSourceChange}
-            className="form-radio"
-          />
-          <span className="ml-2">All Sources</span>
-        </label>
-        <label className="inline-flex items-center mb-2">
-          <input
-            type="radio"
-            value="The Art Institute of Chicago"
-            checked={source === "The Art Institute of Chicago"}
-            onChange={handleSourceChange}
-            className="form-radio"
-          />
-          <span className="ml-2">The Art Institute of Chicago</span>
-        </label>
-        <label className="inline-flex items-center mb-2">
-          <input
-            type="radio"
-            value="Metropolitan Museum of Art"
-            checked={source === "Metropolitan Museum of Art"}
-            onChange={handleSourceChange}
-            className="form-radio"
-          />
-          <span className="ml-2">Metropolitan Museum of Art</span>
-        </label>
+        <label className="block font-semibold mb-1">Source</label>
+        <div className="flex space-x-2">
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              name="source"
+              value=""
+              checked={localFilters.source === ""}
+              onChange={handleInputChange}
+              className="form-radio"
+            />
+            <span className="ml-2">All</span>
+          </label>
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              name="source"
+              value="The Art Institute of Chicago"
+              checked={localFilters.source === "The Art Institute of Chicago"}
+              onChange={handleInputChange}
+              className="form-radio"
+            />
+            <span className="ml-2">Chicago Art Institute</span>
+          </label>
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              name="source"
+              value="Metropolitan Museum of Art"
+              checked={localFilters.source === "Metropolitan Museum of Art"}
+              onChange={handleInputChange}
+              className="form-radio"
+            />
+            <span className="ml-2">Met Museum</span>
+          </label>
+        </div>
       </div>
 
       {/* Artwork Type filter */}
-      <label className="block mb-2 font-semibold">Artwork Type</label>
-      <select
-        value={artworkType || ""}
-        onChange={handleArtworkTypeChange}
-        className="form-select mb-4 bg-gray-300"
-      >
-        <option value="">All Types</option>
-        <option value="Painting">Painting</option>
-        <option value="Sculpture">Sculpture</option>
-        <option value="Drawing">Drawing</option>
-        <option value="Print">Print</option>
-      </select>
+      <div className="flex flex-col">
+        <label className="block font-semibold mb-1">Artwork Type</label>
+        <select
+          name="artworkType"
+          value={localFilters.artworkType}
+          onChange={handleInputChange}
+          className="form-select bg-gray-300 rounded"
+        >
+          <option value="">All Types</option>
+          <option value="Painting">Painting</option>
+          <option value="Sculpture">Sculpture</option>
+          <option value="Drawing">Drawing</option>
+          <option value="Print">Print</option>
+        </select>
+      </div>
 
       {/* Year Range filter */}
-      <label className="block mb-2 font-semibold mt-4">Date Range</label>
-      <div className="flex">
-        <input
-          type="number"
-          value={yearBegin}
-          onChange={handleYearBeginChange}
-          className="border p-1 rounded w-1/2 mr-2 bg-gray-300"
-          placeholder="Year Begin"
-        />
-        <input
-          type="number"
-          value={yearEnd}
-          onChange={handleYearEndChange}
-          className="border p-1 rounded w-1/2 bg-gray-300"
-          placeholder="Year End"
-        />
+      <div className="flex flex-col">
+        <label className="block font-semibold mb-1">Date Range*</label>
+        <div className="flex space-x-2">
+          <input
+            type="number"
+            name="yearBegin"
+            value={localFilters.yearBegin}
+            onChange={handleInputChange}
+            className="border p-1 rounded bg-gray-300 w-20"
+            placeholder="From"
+          />
+          <input
+            type="number"
+            name="yearEnd"
+            value={localFilters.yearEnd}
+            onChange={handleInputChange}
+            className="border p-1 rounded bg-gray-300 w-20"
+            placeholder="To"
+          />
+        </div>
+        <p className="block text-xs mt-1">*Start and End Date Required</p>
       </div>
 
       {/* Is Highlight filter */}
-      <label className="inline-flex items-center mb-2 mt-4">
-        <input
-          type="checkbox"
-          checked={isHighlight}
-          onChange={handleIsHighlightChange}
-          className="form-checkbox"
-        />
-        <span className="ml-2">Show Highlights</span>
-      </label>
+      <div className="flex items-center">
+        <label className="inline-flex items-center">
+          <input
+            type="checkbox"
+            name="isHighlight"
+            checked={localFilters.isHighlight}
+            onChange={handleCheckboxChange}
+            className="form-checkbox"
+          />
+          <span className="ml-2">Show Popular Artworks</span>
+        </label>
+      </div>
+
+      {/* Submit Button */}
+      <div className="flex items-center">
+        <button
+          onClick={applyFilters}
+          className="px-4 py-2 bg-zinc-500 text-white font-semibold rounded hover:bg-orange-600 transition"
+        >
+          Apply Filters
+        </button>
+      </div>
     </div>
   );
 };
 
-export default FilterSidebar;
+export default FilterBar;
