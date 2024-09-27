@@ -109,8 +109,8 @@ export const fetchAndNormalizeArt = async (
       .filter((artwork) => artwork !== null);
 
     const combinedArtworks = [
-      ...normalizedChicagoArtworks,
       ...normalizedMetArtworks,
+      ...normalizedChicagoArtworks,
     ];
 
     if (source) {

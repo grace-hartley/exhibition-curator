@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchAndNormalizeArt } from "../data/fetchAndNormalize";
-import FilterSidebar from "./FilterSidebar";
+import FilterSidebar from "./FilterBar";
 import ArtworkList from "./ArtworkList";
 
 const Gallery = () => {
@@ -17,7 +17,17 @@ const Gallery = () => {
       setLoading(true);
       try {
         const newArtworks = await fetchAndNormalizeArt(page, pageSize);
-        setArtworks((prevArtworks) => [...prevArtworks, ...newArtworks]);
+        if (page === 1) {
+          setArtworks(newArtworks);
+        } else {
+          setArtworks((prevArtworks) => [
+            ...prevArtworks,
+            ...newArtworks.filter(
+              (newArtwork) =>
+                !prevArtworks.some((art) => art.id === newArtwork.id)
+            ),
+          ]);
+        }
       } catch (err) {
         setError("Failed to load artworks");
       } finally {
