@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { fetchAndNormalizeArt } from "../data/fetchAndNormalize";
-import FilterSidebar from "./FilterBar";
 import ArtworkList from "./ArtworkList";
 
 const Gallery = () => {
@@ -10,13 +9,11 @@ const Gallery = () => {
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(null);
 
-  const pageSize = 20;
-
   useEffect(() => {
     const loadArtworks = async () => {
       setLoading(true);
       try {
-        const newArtworks = await fetchAndNormalizeArt(page, pageSize);
+        const newArtworks = await fetchAndNormalizeArt(page);
         if (page === 1) {
           setArtworks(newArtworks);
         } else {
@@ -26,6 +23,7 @@ const Gallery = () => {
               (newArtwork) =>
                 !prevArtworks.some((art) => art.id === newArtwork.id)
             ),
+            // included .filter .some above for two children with same key issue - think something funny going on with the API
           ]);
         }
       } catch (err) {
@@ -59,7 +57,7 @@ const Gallery = () => {
               <div className="text-center mt-8">
                 <button
                   onClick={loadMoreArtworks}
-                  className="px-6 py-2 bg-stone-500 text-white font-semibold rounded hover:bg-blue-600 transition"
+                  className="px-6 py-2 bg-stone-500 text-white font-semibold rounded hover:bg-orange-600 transition"
                 >
                   Load More Artworks
                 </button>

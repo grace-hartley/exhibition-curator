@@ -7,7 +7,7 @@ const CuratedCollection = () => {
   const { curatedList, setCuratedList } = useContext(CuratedContext);
   return (
     <>
-      <h1 className="text-4xl font-bold text-center mb-8 p-5">
+      <h1 className="text-3xl md:text-4xl font-bold text-center p-5">
         Welcome to Your Collection
       </h1>
       {curatedList.length === 0 ? (

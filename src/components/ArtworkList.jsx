@@ -28,24 +28,27 @@ const ArtworkList = ({ artworks }) => {
           <div className="text-center">
             <p className="text-lg font-semibold">{artwork.title}</p>
             <p className="text-sm text-gray-500">{artwork.year}</p>
-
-            {isInCuratedList(artwork, curatedList) ? (
-              <button
-                onClick={() =>
-                  removeFromCuratedList(artwork, curatedList, setCuratedList)
-                }
-              >
-                <FiMinusCircle size={20} />
-              </button>
-            ) : (
-              <button
-                onClick={() =>
-                  addToCuratedList(artwork, curatedList, setCuratedList)
-                }
-              >
-                <FiPlusCircle size={20} />
-              </button>
-            )}
+            <div className="m-1">
+              {isInCuratedList(artwork, curatedList) ? (
+                <button
+                  onClick={() =>
+                    removeFromCuratedList(artwork, curatedList, setCuratedList)
+                  }
+                  aria-label="Remove"
+                >
+                  <FiMinusCircle size={20} />
+                </button>
+              ) : (
+                <button
+                  onClick={() =>
+                    addToCuratedList(artwork, curatedList, setCuratedList)
+                  }
+                  aria-label="Add"
+                >
+                  <FiPlusCircle size={20} />
+                </button>
+              )}
+            </div>
           </div>
         </li>
       ))}

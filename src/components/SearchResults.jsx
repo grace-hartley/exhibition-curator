@@ -41,6 +41,7 @@ const SearchResults = ({ searchQuery, page, setPage }) => {
               (newArtwork) =>
                 !prevArtworks.some((art) => art.id === newArtwork.id)
             ),
+            // included .filter .some above for two children with same key issue - think something funny going on with the API
           ]);
         }
       } catch (err) {
@@ -53,11 +54,19 @@ const SearchResults = ({ searchQuery, page, setPage }) => {
     loadArtworks();
   }, [page, searchQuery, filters]);
 
+  // Resets the artwork, pages, filters & hasMore
   useEffect(() => {
-    setPage(1); // Reset page to 1 when filters or searchQuery changes
-    setArtworks([]); // Clear the current artworks so that only the filtered ones show
-    setHasMore(true); // Reset hasMore for new filter sets
-  }, [filters, searchQuery, setPage]);
+    setPage(1);
+    setArtworks([]);
+    setHasMore(true);
+    setFilters({
+      source: "",
+      artworkType: "",
+      yearBegin: "",
+      yearEnd: "",
+      isHighlight: false,
+    });
+  }, [searchQuery, setPage]);
 
   const loadMoreArtworks = () => {
     if (hasMore && !loading) {

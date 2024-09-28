@@ -48,7 +48,7 @@ export const normalizeChicagoArtworks = (artwork) => {
     medium: artwork.medium_display || "Unknown Medium",
     type: artwork.artwork_type_title || "Type Unknown",
     imageUrl: artworkImage,
-    imageUrlSmall: artworkImage, // no small image provided so just used standard image
+    imageUrlSmall: artworkImage, // no small image provided so just used standard image again
     isHighlight: artwork.is_boosted,
     source: "The Art Institute of Chicago",
     infoURL: detailsPage || "Link not available.",

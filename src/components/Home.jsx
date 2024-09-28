@@ -20,14 +20,16 @@ const Home = () => {
           </p>
           <p>
             To get started, browze the gallery below or use the search bar to
-            start exporing. When you find a piece of at that is calling your
-            name, add it to your collection by pressing the{" "}
+            start exporing, where you can futher refine your search. If you want
+            to find out more about a piece of art, simply click on the
+            corresponding image. When you find a piece of at that is calling
+            your name, add it to your collection by pressing the{" "}
             <span className="inline-flex items-center">
-              <FiPlusCircle className="mr-1" /> button
+              <FiPlusCircle className="mr-1" aria-label="Add" /> button
             </span>
             , or the{" "}
             <span className="inline-flex items-center">
-              <FiMinusCircle className="mr-1" /> button
+              <FiMinusCircle className="mr-1" aria-label="Remove" /> button
             </span>{" "}
             if you change your mind.
           </p>

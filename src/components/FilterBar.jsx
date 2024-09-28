@@ -50,7 +50,7 @@ const FilterBar = ({ filters, setFilters }) => {
   };
 
   return (
-    <div className="filter-bar p-3 bg-gray-100 rounded flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+    <div className="p-3 bg-gray-100 rounded flex flex-col md:flex-row  md:justify-between space-y-4 md:space-y-0">
       {/* Source filter */}
       <div className="flex flex-col">
         <label className="block font-semibold mb-1">Source</label>

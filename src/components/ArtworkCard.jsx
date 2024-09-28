@@ -44,7 +44,7 @@ const ArtworkCard = () => {
   }
 
   return (
-    <div className="pb-12 bg-gray-50">
+    <div className="pb-12 bg-gray-50 z-10">
       <div className="px-12 py-6 flex justify-center items-center bg-gray-100">
         <div className="relative">
           <img
@@ -62,6 +62,7 @@ const ArtworkCard = () => {
                     setCuratedList
                   )
                 }
+                aria-label="Remove"
                 className="p-2 text-gray-800 hover:text-gray-600 transition bg-white rounded-full shadow-md"
               >
                 <FiMinusCircle size={24} />
@@ -71,6 +72,7 @@ const ArtworkCard = () => {
                 onClick={() =>
                   addToCuratedList(artworkCard, curatedList, setCuratedList)
                 }
+                aria-label="Add"
                 className="p-2 text-gray-800 hover:text-gray-600 transition bg-white rounded-full shadow-md"
               >
                 <FiPlusCircle size={24} />
@@ -104,7 +106,7 @@ const ArtworkCard = () => {
                 href={artworkCard.infoURL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-500 underline"
+                className="text-orange-600 underline"
               >
                 {artworkCard.title}
               </a>
