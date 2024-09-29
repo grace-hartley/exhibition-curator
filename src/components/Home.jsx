@@ -15,8 +15,8 @@ const Home = () => {
         <div className="text-gray-700 leading-relaxed space-y-4">
           <p>
             ExhibitionCurator allows you to explore more about a wide range of
-            art and curate your own personal collection of art. This is your
-            place to let your personanality shine!
+            art and curate your own personal art collection. This is your place
+            to let your personanality shine!
           </p>
           <p>
             To get started, browze the gallery below or use the search bar to

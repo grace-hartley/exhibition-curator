@@ -86,22 +86,3 @@ export const searchChicagoArtworks = async (
       return [];
     });
 };
-
-// example of working filters
-// https://api.artic.edu/api/v1/artworks/search?q=flower&page=1&limit=20&fields=id,title,artist_title,date_display,medium_display,artwork_type_title,image_id,is_boosted,date_end,date_start&query[range][date_end][gte]=1700&query[range][date_end][lte]=1800
-
-// https://api.artic.edu/api/v1/artworks/search?q=flower&query[term][is_boosted]=true
-
-/* 
-types:
-Painting
-Sculpture
-Print
-Photograph
-Drawing and Watercolor
-Textile
-Architectural Drawing
-Vessel
-Book
-
-*/

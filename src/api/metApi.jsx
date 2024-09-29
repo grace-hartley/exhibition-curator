@@ -82,32 +82,3 @@ export const searchMetArtworks = (
       return [];
     });
 };
-
-// example of working year range filter
-
-//https://collectionapi.metmuseum.org/public/collection/v1/search?dateBegin=1700&dateEnd=1800&q=African
-
-// https://collectionapi.metmuseum.org/public/collection/v1/search?isHighlight=true&q=African
-
-// https://collectionapi.metmuseum.org/public/collection/v1/search?dateBegin=1700&dateEnd=1800&isHighlight=true&q=African
-
-// https://collectionapi.metmuseum.org/public/collection/v1/search?medium=Drawings&q=African
-
-// combining them works both ways around
-
-/* 
-types:
-Woodwork
-Basketry, Ceramics, Paintings
-
-
-Ceramics
-Furniture
-Paintings
-Sculpture
-Textiles
-Drawings
-
-
-complicated...
-*/
