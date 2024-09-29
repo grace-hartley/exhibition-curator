@@ -54,19 +54,11 @@ const SearchResults = ({ searchQuery, page, setPage }) => {
     loadArtworks();
   }, [page, searchQuery, filters]);
 
-  // Resets the artwork, pages, filters & hasMore
   useEffect(() => {
     setPage(1);
     setArtworks([]);
     setHasMore(true);
-    setFilters({
-      source: "",
-      artworkType: "",
-      yearBegin: "",
-      yearEnd: "",
-      isHighlight: false,
-    });
-  }, [searchQuery, setPage]);
+  }, [searchQuery, setPage, filters]);
 
   const loadMoreArtworks = () => {
     if (hasMore && !loading) {
