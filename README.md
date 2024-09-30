@@ -20,6 +20,8 @@ The Metropolitan Museum of Art Collection API: https://metmuseum.github.io/
 
 Art Institute of Chicago API: https://api.artic.edu/docs/
 
+Both APIs are free to use and do not require API keys.
+
 ## Running Project Locally
 
 In order to run this repository locally, follow these steps:
